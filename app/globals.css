@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+:root {
+  --background: #faf9f7;
+  --foreground: #1c1917;
+  --card: #ffffff;
+  --muted: #78716c;
+  --border: #e7e5e4;
+  --accent: #1c1917;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-geist-sans);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle checkerboard so transparent cut-out PNGs read as cut-outs */
+.bg-checker {
+  background-image:
+    linear-gradient(45deg, #f0eeec 25%, transparent 25%),
+    linear-gradient(-45deg, #f0eeec 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #f0eeec 75%),
+    linear-gradient(-45deg, transparent 75%, #f0eeec 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+}

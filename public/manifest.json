@@ -1,0 +1,17 @@
+{
+  "name": "Capsule — Your Digital Wardrobe",
+  "short_name": "Capsule",
+  "description": "Catalog your wardrobe, build outfits, and get AI styling.",
+  "start_url": "/closet",
+  "display": "standalone",
+  "background_color": "#faf9f7",
+  "theme_color": "#faf9f7",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
