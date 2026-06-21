@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { createClient } from "@/lib/supabase/server";
 import { categoryLabel } from "@/lib/constants";
+import { buildFitBrief, type StyleProfile } from "@/lib/fit";
 
 // AI Stylist: builds outfits from the user's actual closet, grounded in current
 // trends via Claude's web search tool. Returns validated, structured outfits.
@@ -28,7 +29,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Not signed in." }, { status: 401 });
   }
 
-  const { prompt } = (await request.json()) as { prompt?: string };
+  const { prompt, forBody } = (await request.json()) as {
+    prompt?: string;
+    forBody?: boolean;
+  };
   if (!prompt?.trim()) {
     return NextResponse.json({ error: "Tell the stylist what you need." }, { status: 400 });
   }
@@ -61,17 +65,30 @@ export async function POST(request: Request) {
     })
     .join("\n");
 
+  let fitBrief: string | null = null;
+  if (forBody) {
+    const { data: sp } = await supabase
+      .from("style_profiles")
+      .select("*")
+      .maybeSingle();
+    fitBrief = buildFitBrief((sp as StyleProfile | null) ?? null);
+  }
+
+  const fitSection = fitBrief
+    ? `\nThe user wants outfits chosen to flatter their body. Use this fit profile, and make each rationale explain (kindly, never judgmentally) how the outfit flatters them — proportion, balance, silhouette, or color.\nFIT PROFILE:\n${fitBrief}\n`
+    : "";
+
   const system = `You are an expert personal stylist. Build outfits using ONLY the user's existing wardrobe items listed below. Use the web_search tool to ground your suggestions in current fashion trends relevant to the user's request (occasion, season, style).
 
 Rules:
 - Only use item ids that appear in the WARDROBE list. Never invent ids.
 - Each outfit must be a coherent, wearable combination — generally a top + bottom (or a dress), plus optional shoes, outerwear, bag, or accessories from the wardrobe.
 - Produce the number of distinct outfits the user asks for (default 5 if unspecified).
-- Keep each rationale to one or two sentences, and reference the current trend it draws on.
+- Keep each rationale to one or two sentences, and reference the current trend it draws on${fitBrief ? ", as well as how it flatters the user's body" : ""}.
 
 Respond with ONLY a JSON object, no markdown fences and no extra prose, in exactly this shape:
 {"outfits":[{"name":"string","rationale":"string","item_ids":["string"]}],"trend_note":"string"}
-
+${fitSection}
 WARDROBE:
 ${catalog}`;
 

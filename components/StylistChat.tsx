@@ -35,6 +35,7 @@ export function StylistChat({
   const itemsById = new Map(items.map((i) => [i.id, i]));
 
   const [prompt, setPrompt] = useState("");
+  const [forBody, setForBody] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<StylistResult | null>(null);
@@ -51,7 +52,7 @@ export function StylistChat({
       const res = await fetch("/api/stylist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: q.trim() }),
+        body: JSON.stringify({ prompt: q.trim(), forBody }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Something went wrong.");
@@ -133,6 +134,18 @@ export function StylistChat({
           placeholder="e.g. Give me 5 office outfits based on current trends"
           className="w-full rounded-xl border border-border bg-card px-3.5 py-2.5 text-sm outline-none focus:border-accent"
         />
+        <label className="flex items-center gap-2 text-sm text-muted">
+          <input
+            type="checkbox"
+            checked={forBody}
+            onChange={(e) => setForBody(e.target.checked)}
+          />
+          Style for my body (uses your{" "}
+          <Link href="/profile" className="underline hover:text-foreground">
+            fit profile
+          </Link>
+          )
+        </label>
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="submit"

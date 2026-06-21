@@ -11,6 +11,7 @@ const LINKS = [
   { href: "/calendar", label: "Calendar" },
   { href: "/stylist", label: "Stylist" },
   { href: "/insights", label: "Insights" },
+  { href: "/profile", label: "Me" },
 ];
 
 export function AppNav({ email }: { email: string }) {

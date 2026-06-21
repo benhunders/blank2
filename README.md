@@ -42,6 +42,8 @@ ANTHROPIC_API_KEY=...               # Phase 3 only, server-side
 - [x] **Phase 5** — Calendar + wear logging (month view, one-tap "wore today")
 - [x] **Phase 6** — Insights (cost-per-wear, most worn, orphans, category mix)
 - [x] **Phase 7** — Installable PWA (manifest, icons, service worker, offline), Google OAuth, faster WebGPU background removal
+- [x] **Phase 8** — Body-aware fit styling (fit profile + photo analysis via Claude vision; stylist styles for your body)
+- [ ] **Phase 9** — Virtual try-on (FASHN.ai — see an outfit rendered on your photo)
 
 ## Data model
 
