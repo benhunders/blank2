@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { WARDROBE_BUCKET } from "@/lib/images";
 import { CATEGORIES, SUBCATEGORIES, SEASONS, categoryLabel } from "@/lib/constants";
+import { TryOnButton } from "@/components/TryOnButton";
 import type { Item, ItemCategory } from "@/lib/types";
+
+const TRYON_CATEGORIES = ["tops", "bottoms", "dresses", "outerwear"];
 
 export function ItemDetail({
   item,
@@ -162,6 +165,10 @@ export function ItemDetail({
             >
               {logged ? "Logged for today ✓" : logging ? "Logging…" : "👕 Wore today"}
             </button>
+
+            {TRYON_CATEGORIES.includes(item.category) && (
+              <TryOnButton itemId={item.id} />
+            )}
 
             <div className="flex gap-3 pt-2">
               <button

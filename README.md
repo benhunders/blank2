@@ -25,7 +25,8 @@ Environment variables live in `.env.local` (gitignored):
 ```
 NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...   # publishable key
-ANTHROPIC_API_KEY=...               # Phase 3 only, server-side
+ANTHROPIC_API_KEY=...               # stylist + photo analysis, server-side
+FASHN_API_KEY=...                   # virtual try-on (Phase 9), server-side
 ```
 
 > **Auth note:** The MVP uses email/password. For instant accounts during
@@ -43,7 +44,7 @@ ANTHROPIC_API_KEY=...               # Phase 3 only, server-side
 - [x] **Phase 6** — Insights (cost-per-wear, most worn, orphans, category mix)
 - [x] **Phase 7** — Installable PWA (manifest, icons, service worker, offline), Google OAuth, faster WebGPU background removal
 - [x] **Phase 8** — Body-aware fit styling (fit profile + photo analysis via Claude vision; stylist styles for your body)
-- [ ] **Phase 9** — Virtual try-on (FASHN.ai — see an outfit rendered on your photo)
+- [x] **Phase 9** — Virtual try-on (FASHN.ai — render items/outfits on your profile photo)
 
 ## Data model
 

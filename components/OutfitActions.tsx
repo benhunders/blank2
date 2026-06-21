@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { TryOnButton } from "@/components/TryOnButton";
 
 export function OutfitActions({ outfitId }: { outfitId: string }) {
   const router = useRouter();
@@ -61,6 +62,7 @@ export function OutfitActions({ outfitId }: { outfitId: string }) {
       >
         {logged ? "Logged for today ✓" : logging ? "Logging…" : "👕 Wore today"}
       </button>
+      <TryOnButton outfitId={outfitId} />
       <div className="flex gap-3">
         <Link
           href={`/outfits/${outfitId}/edit`}
