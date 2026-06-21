@@ -26,7 +26,10 @@ Environment variables live in `.env.local` (gitignored):
 NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...   # publishable key
 ANTHROPIC_API_KEY=...               # stylist + photo analysis, server-side
-FASHN_API_KEY=...                   # virtual try-on (Phase 9), server-side
+FASHN_API_KEY=...                   # virtual try-on (FASHN), server-side
+FAL_KEY=...                         # virtual try-on (Kling via fal.ai), server-side
+TRYON_PROVIDER=fashn                # default try-on engine: fashn | fal
+NEXT_PUBLIC_TRYON_DEBUG=1           # optional: show in-app provider picker/compare
 ```
 
 > **Auth note:** The MVP uses email/password. For instant accounts during
@@ -44,7 +47,7 @@ FASHN_API_KEY=...                   # virtual try-on (Phase 9), server-side
 - [x] **Phase 6** — Insights (cost-per-wear, most worn, orphans, category mix)
 - [x] **Phase 7** — Installable PWA (manifest, icons, service worker, offline), Google OAuth, faster WebGPU background removal
 - [x] **Phase 8** — Body-aware fit styling (fit profile + photo analysis via Claude vision; stylist styles for your body)
-- [x] **Phase 9** — Virtual try-on (FASHN.ai — render items/outfits on your profile photo)
+- [x] **Phase 9** — Virtual try-on (render items/outfits on your profile photo); provider-agnostic (FASHN + Kling via fal.ai) with an in-app dev toggle to compare quality/price
 
 ## Data model
 

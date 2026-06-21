@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { signPaths, WARDROBE_BUCKET } from "@/lib/images";
-import { runTryOn, tryOnCategory, type TryOnCategory } from "@/lib/fashn";
+import {
+  getTryOnProvider,
+  configuredProviderIds,
+  defaultProviderId,
+} from "@/lib/tryon";
+import { PROVIDERS, tryOnCategory, type TryOnCategory } from "@/lib/tryon/types";
 
 export const maxDuration = 60;
 
@@ -11,10 +16,23 @@ interface Garment {
 }
 type ItemLite = { id: string; image_url: string | null; category: string };
 
+// Lists the configured providers (+ price hints) for the dev/eval toggle.
+export async function GET() {
+  const ids = configuredProviderIds();
+  return NextResponse.json({
+    providers: ids.map((id) => ({
+      id,
+      label: PROVIDERS[id].label,
+      pricePerImage: PROVIDERS[id].pricePerImage,
+    })),
+    default: defaultProviderId(),
+  });
+}
+
 export async function POST(request: Request) {
-  if (!process.env.FASHN_API_KEY) {
+  if (configuredProviderIds().length === 0) {
     return NextResponse.json(
-      { error: "Try-on isn't configured yet — add FASHN_API_KEY." },
+      { error: "Try-on isn't configured yet — add FASHN_API_KEY or FAL_KEY." },
       { status: 503 },
     );
   }
@@ -25,9 +43,10 @@ export async function POST(request: Request) {
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Not signed in." }, { status: 401 });
 
-  const { itemId, outfitId } = (await request.json()) as {
+  const { itemId, outfitId, provider: requested } = (await request.json()) as {
     itemId?: string;
     outfitId?: string;
+    provider?: string;
   };
 
   // Person image comes from the fit profile.
@@ -88,7 +107,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Nothing to try on." }, { status: 400 });
   }
 
-  // Sign the private images so FASHN can fetch them.
+  const provider = getTryOnProvider(requested);
+
+  // Sign the private images so the provider can fetch them.
   const urls = await signPaths(supabase, [
     profile.photo_path,
     ...garments.map((g) => g.path),
@@ -97,9 +118,8 @@ export async function POST(request: Request) {
   let resultUrl: string;
   try {
     let personUrl = urls[profile.photo_path];
-    // Layer garments sequentially (e.g. top, then bottom on the result).
     for (const g of garments) {
-      personUrl = await runTryOn(personUrl, urls[g.path], g.category);
+      personUrl = await provider.runTryOn(personUrl, urls[g.path], g.category);
     }
     resultUrl = personUrl;
   } catch (err) {
@@ -129,8 +149,9 @@ export async function POST(request: Request) {
     outfit_id: outfitId ?? null,
     person_photo_path: profile.photo_path,
     result_path: resultPath,
+    provider: provider.id,
   });
 
   const signed = await signPaths(supabase, [resultPath]);
-  return NextResponse.json({ url: signed[resultPath] });
+  return NextResponse.json({ url: signed[resultPath], provider: provider.id });
 }
