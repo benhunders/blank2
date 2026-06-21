@@ -3,7 +3,13 @@ import { NextResponse, type NextRequest } from "next/server";
 
 // Next 16 renamed `middleware` -> `proxy`. This refreshes the Supabase auth
 // session on every request and guards protected routes.
-const PUBLIC_PATHS = ["/", "/sign-in", "/sign-up"];
+const PUBLIC_PATHS = [
+  "/",
+  "/sign-in",
+  "/sign-up",
+  "/auth/callback",
+  "/offline",
+];
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -55,5 +61,5 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   // Run on everything except static assets and image optimization.
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|manifest.json|.*\\.(?:png|jpg|jpeg|gif|svg|webp|ico)$).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|sw.js|.*\\.(?:png|jpg|jpeg|gif|svg|webp|ico)$).*)"],
 };

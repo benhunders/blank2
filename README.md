@@ -41,7 +41,7 @@ ANTHROPIC_API_KEY=...               # Phase 3 only, server-side
 - [x] **Phase 4** — Capsules & packing lists (collections of items + outfits, pack checklist)
 - [x] **Phase 5** — Calendar + wear logging (month view, one-tap "wore today")
 - [x] **Phase 6** — Insights (cost-per-wear, most worn, orphans, category mix)
-- [ ] **Phase 7** — PWA polish, Google OAuth, mobile prep
+- [x] **Phase 7** — Installable PWA (manifest, icons, service worker, offline), Google OAuth, faster WebGPU background removal
 
 ## Data model
 
