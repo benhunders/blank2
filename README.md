@@ -38,9 +38,9 @@ ANTHROPIC_API_KEY=...               # Phase 3 only, server-side
 - [x] **Phase 1** — Auth + Closet (upload, background removal, categories, grid, filters)
 - [x] **Phase 2** — Outfit builder (drag-and-drop)
 - [x] **Phase 3** — AI Stylist (Claude Sonnet 4.6 + live web-search trend grounding)
-- [ ] **Phase 4** — Capsules & packing lists
-- [ ] **Phase 5** — Calendar & wear logging
-- [ ] **Phase 6** — Cost-per-wear analytics
+- [x] **Phase 4** — Capsules & packing lists (collections of items + outfits, pack checklist)
+- [x] **Phase 5** — Calendar + wear logging (month view, one-tap "wore today")
+- [x] **Phase 6** — Insights (cost-per-wear, most worn, orphans, category mix)
 - [ ] **Phase 7** — PWA polish, Google OAuth, mobile prep
 
 ## Data model

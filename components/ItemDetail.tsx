@@ -20,6 +20,25 @@ export function ItemDetail({
   const [editing, setEditing] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [logging, setLogging] = useState(false);
+  const [logged, setLogged] = useState(false);
+
+  async function handleWoreToday() {
+    setLogging(true);
+    setError(null);
+    const t = new Date();
+    const worn_on = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
+    const { error: logErr } = await supabase
+      .from("wears")
+      .insert({ item_id: item.id, worn_on });
+    setLogging(false);
+    if (logErr) {
+      setError(logErr.message);
+      return;
+    }
+    setLogged(true);
+    router.refresh();
+  }
 
   const [category, setCategory] = useState<ItemCategory>(item.category);
   const [subcategory, setSubcategory] = useState(item.subcategory ?? "");
@@ -135,6 +154,14 @@ export function ItemDetail({
                 {error}
               </p>
             )}
+
+            <button
+              onClick={handleWoreToday}
+              disabled={logging || logged}
+              className="w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium hover:bg-border/40 disabled:opacity-60"
+            >
+              {logged ? "Logged for today ✓" : logging ? "Logging…" : "👕 Wore today"}
+            </button>
 
             <div className="flex gap-3 pt-2">
               <button
