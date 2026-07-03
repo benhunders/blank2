@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { categoryLabel } from "@/lib/constants";
 import { collectionTypeLabel } from "@/lib/collections";
+import { formatDay } from "@/lib/dates";
 import { OutfitBoard } from "@/components/OutfitBoard";
 import type { BoardItem } from "@/lib/outfits";
 import type { OutfitSummary } from "@/lib/load-outfits";
@@ -135,13 +136,8 @@ export function CapsuleDetail({
 
   const packedCount = memberItems.filter((i) => packed.has(i.id)).length;
   const range = [collection.start_date, collection.end_date]
-    .filter(Boolean)
-    .map((d) =>
-      new Date(d!).toLocaleDateString(undefined, {
-        month: "short",
-        day: "numeric",
-      }),
-    )
+    .filter((d): d is string => !!d)
+    .map((d) => formatDay(d))
     .join(" – ");
 
   return (

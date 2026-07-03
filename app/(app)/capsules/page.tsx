@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { signPaths } from "@/lib/images";
 import { collectionTypeEmoji, collectionTypeLabel } from "@/lib/collections";
+import { formatDay } from "@/lib/dates";
 
 type Row = {
   id: string;
@@ -15,10 +16,8 @@ type Row = {
 
 function dateRange(start: string | null, end: string | null): string | null {
   if (!start && !end) return null;
-  const fmt = (d: string) =>
-    new Date(d).toLocaleDateString(undefined, { month: "short", day: "numeric" });
-  if (start && end) return `${fmt(start)} – ${fmt(end)}`;
-  return fmt((start ?? end)!);
+  if (start && end) return `${formatDay(start)} – ${formatDay(end)}`;
+  return formatDay((start ?? end)!);
 }
 
 export default async function CapsulesPage() {

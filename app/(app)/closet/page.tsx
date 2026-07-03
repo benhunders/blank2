@@ -22,9 +22,14 @@ export default async function ClosetPage({
   let query = supabase.from("items").select("*");
   if (category) query = query.eq("category", category);
   if (q) {
-    query = query.or(
-      `brand.ilike.%${q}%,subcategory.ilike.%${q}%,color.ilike.%${q}%,notes.ilike.%${q}%`,
-    );
+    // Strip characters that are syntax in a PostgREST .or() filter string
+    // (comma, parens, dots) so free-text search can't corrupt the query.
+    const safe = q.replace(/[,().]/g, " ").trim();
+    if (safe) {
+      query = query.or(
+        `brand.ilike.%${safe}%,subcategory.ilike.%${safe}%,color.ilike.%${safe}%,notes.ilike.%${safe}%`,
+      );
+    }
   }
 
   if (sort === "wears") query = query.order("wear_count", { ascending: false });

@@ -10,6 +10,9 @@ import { PROVIDERS, tryOnCategory, type TryOnCategory } from "@/lib/tryon/types"
 
 export const maxDuration = 60;
 
+// Each render costs real money at the provider — cap per user per day.
+const DAILY_TRYON_LIMIT = 30;
+
 interface Garment {
   path: string;
   category: TryOnCategory;
@@ -42,6 +45,19 @@ export async function POST(request: Request) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Not signed in." }, { status: 401 });
+
+  // RLS scopes this count to the current user.
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const { count } = await supabase
+    .from("tryon_results")
+    .select("id", { count: "exact", head: true })
+    .gte("created_at", since);
+  if ((count ?? 0) >= DAILY_TRYON_LIMIT) {
+    return NextResponse.json(
+      { error: "Daily try-on limit reached — try again tomorrow." },
+      { status: 429 },
+    );
+  }
 
   const { itemId, outfitId, provider: requested } = (await request.json()) as {
     itemId?: string;
