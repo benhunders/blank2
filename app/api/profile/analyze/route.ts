@@ -4,8 +4,13 @@ import { createClient } from "@/lib/supabase/server";
 import { WARDROBE_BUCKET } from "@/lib/images";
 import type { PhotoAnalysis } from "@/lib/fit";
 
+export const maxDuration = 60;
+
 const ALLOWED = ["image/jpeg", "image/png", "image/gif", "image/webp"] as const;
 type Media = (typeof ALLOWED)[number];
+
+// The Anthropic API rejects images larger than ~5MB.
+const MAX_IMAGE_BYTES = 4.5 * 1024 * 1024;
 
 export async function POST() {
   if (!process.env.ANTHROPIC_API_KEY) {
@@ -35,6 +40,12 @@ export async function POST() {
     .download(profile.photo_path);
   if (dlErr || !blob) {
     return NextResponse.json({ error: "Couldn't read the photo." }, { status: 500 });
+  }
+  if (blob.size > MAX_IMAGE_BYTES) {
+    return NextResponse.json(
+      { error: "That photo is too large to analyze — try one under 4MB." },
+      { status: 400 },
+    );
   }
 
   const mediaType: Media = (ALLOWED as readonly string[]).includes(blob.type)

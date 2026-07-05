@@ -143,11 +143,12 @@ export function AddItemForm() {
           )}
         </div>
 
+        {/* No `capture` attr: it forces the camera on Android and blocks
+            picking an existing photo — the OS picker offers both. */}
         <input
           ref={fileInput}
           type="file"
           accept="image/*"
-          capture="environment"
           onChange={handleFile}
           className="hidden"
         />

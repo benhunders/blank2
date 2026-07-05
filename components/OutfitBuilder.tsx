@@ -137,7 +137,6 @@ export function OutfitBuilder({
           .update(payload)
           .eq("id", outfitId);
         if (upErr) throw upErr;
-        await supabase.from("outfit_items").delete().eq("outfit_id", outfitId);
       } else {
         const { data, error: insErr } = await supabase
           .from("outfits")
@@ -148,14 +147,26 @@ export function OutfitBuilder({
         outfitId = data.id as string;
       }
 
+      // Upsert the new set first, then prune stale rows — never a moment
+      // where the outfit has no items if a request fails mid-save.
       const rows = placements.map((p) => ({
         outfit_id: outfitId,
         item_id: p.itemId,
       }));
       const { error: itemsErr } = await supabase
         .from("outfit_items")
-        .insert(rows);
+        .upsert(rows);
       if (itemsErr) throw itemsErr;
+
+      if (existing?.id) {
+        const keep = placements.map((p) => p.itemId).join(",");
+        const { error: pruneErr } = await supabase
+          .from("outfit_items")
+          .delete()
+          .eq("outfit_id", outfitId)
+          .not("item_id", "in", `(${keep})`);
+        if (pruneErr) throw pruneErr;
+      }
 
       router.push(`/outfits/${outfitId}`);
       router.refresh();

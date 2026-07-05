@@ -7,6 +7,11 @@ import { buildFitBrief, type StyleProfile } from "@/lib/fit";
 // AI Stylist: builds outfits from the user's actual closet, grounded in current
 // trends via Claude's web search tool. Returns validated, structured outfits.
 
+// Web-search rounds can take well over the default function timeout.
+export const maxDuration = 60;
+
+const MAX_PROMPT_CHARS = 1000;
+
 interface SuggestedOutfit {
   name: string;
   rationale: string;
@@ -35,6 +40,12 @@ export async function POST(request: Request) {
   };
   if (!prompt?.trim()) {
     return NextResponse.json({ error: "Tell the stylist what you need." }, { status: 400 });
+  }
+  if (prompt.length > MAX_PROMPT_CHARS) {
+    return NextResponse.json(
+      { error: `Keep your request under ${MAX_PROMPT_CHARS} characters.` },
+      { status: 400 },
+    );
   }
 
   // Load the user's closet as a compact catalog.
@@ -111,8 +122,11 @@ ${catalog}`;
         messages,
       });
 
+      // Collect text per response, not cumulatively: interim text from a
+      // pause_turn iteration would otherwise pollute the JSON extraction.
+      let text = "";
       for (const block of response.content) {
-        if (block.type === "text") finalText += block.text;
+        if (block.type === "text") text += block.text;
         if (block.type === "web_search_tool_result") {
           const content = block.content;
           if (Array.isArray(content)) {
@@ -124,6 +138,7 @@ ${catalog}`;
           }
         }
       }
+      finalText = text;
 
       if (response.stop_reason === "pause_turn") {
         messages.push({ role: "assistant", content: response.content });

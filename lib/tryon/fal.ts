@@ -46,6 +46,9 @@ async function runTryOn(
     if (!statusRes.ok) continue;
     const data = (await statusRes.json()) as { status: string };
     if (data.status === "COMPLETED") break;
+    if (data.status === "FAILED" || data.status === "ERROR") {
+      throw new Error("fal try-on failed.");
+    }
     if (i === 24) throw new Error("fal try-on timed out.");
   }
 
