@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const DEBUG = process.env.NEXT_PUBLIC_TRYON_DEBUG === "1";
@@ -163,7 +164,11 @@ export function TryOnButton({
       {results.length > 0 && (
         <p className="text-xs text-muted">
           AI-generated preview — illustrative styling, not a guarantee of size or
-          exact fit.
+          exact fit. Saved to{" "}
+          <Link href="/tryons" className="underline hover:text-foreground">
+            my try-ons
+          </Link>
+          .
         </p>
       )}
     </div>

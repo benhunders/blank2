@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { signPaths } from "@/lib/images";
 import type { StyleProfile } from "@/lib/fit";
@@ -17,12 +18,22 @@ export default async function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Your fit profile</h1>
-        <p className="text-sm text-muted">
-          Tell the stylist about your body and preferences, so suggestions
-          flatter you. Everything here is private to your account.
-        </p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Your fit profile
+          </h1>
+          <p className="text-sm text-muted">
+            Tell the stylist about your body and preferences, so suggestions
+            flatter you. Everything here is private to your account.
+          </p>
+        </div>
+        <Link
+          href="/tryons"
+          className="shrink-0 rounded-xl border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-border/40"
+        >
+          🪞 My try-ons
+        </Link>
       </div>
       <StyleProfileForm initialProfile={profile} initialPhotoUrl={photoUrl} />
     </div>
