@@ -48,6 +48,7 @@ NEXT_PUBLIC_TRYON_DEBUG=1           # optional: show in-app provider picker/comp
 - [x] **Phase 7** — Installable PWA (manifest, icons, service worker, offline), Google OAuth, faster WebGPU background removal
 - [x] **Phase 8** — Body-aware fit styling (fit profile + photo analysis via Claude vision; stylist styles for your body)
 - [x] **Phase 9** — Virtual try-on (render items/outfits on your profile photo); provider-agnostic (FASHN + Kling via fal.ai) with an in-app dev toggle to compare quality/price
+- [x] **Phase 10** — AI auto-tagging: snapping a photo pre-fills category, subcategory, color, season, and brand via Claude vision (fields stay editable; manual flow unaffected if AI is unavailable)
 
 ## Data model
 
