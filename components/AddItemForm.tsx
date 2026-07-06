@@ -4,11 +4,20 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { removeImageBackground } from "@/lib/background-removal";
+import { downscaleImage } from "@/lib/downscale";
 import { WARDROBE_BUCKET } from "@/lib/images";
 import { CATEGORIES, SUBCATEGORIES, SEASONS } from "@/lib/constants";
 import type { ItemCategory } from "@/lib/types";
 
 type Stage = "pick" | "processing" | "review" | "saving";
+
+interface AutoTags {
+  category: ItemCategory | null;
+  subcategory: string | null;
+  color: string | null;
+  season: string[];
+  brand: string | null;
+}
 
 export function AddItemForm() {
   const router = useRouter();
@@ -31,6 +40,53 @@ export function AddItemForm() {
   const [seasons, setSeasons] = useState<string[]>([]);
   const [notes, setNotes] = useState("");
 
+  // Auto-tagging: AI only fills fields the user hasn't touched, and results
+  // from a superseded photo are ignored.
+  const [tagStatus, setTagStatus] = useState<"idle" | "tagging" | "done">("idle");
+  const touched = useRef<Set<string>>(new Set());
+  const analyzeSeq = useRef(0);
+
+  function markTouched(field: string) {
+    touched.current.add(field);
+  }
+
+  async function autoTag(blob: Blob) {
+    const seq = ++analyzeSeq.current;
+    setTagStatus("tagging");
+    try {
+      // Composite the transparent cut-out onto white and shrink for upload.
+      const small = await downscaleImage(blob, 768, "#ffffff");
+      const form = new FormData();
+      form.append("image", small, "item.jpg");
+      const res = await fetch("/api/items/analyze", {
+        method: "POST",
+        body: form,
+      });
+      if (seq !== analyzeSeq.current) return; // a newer photo superseded this
+      if (!res.ok) {
+        setTagStatus("idle"); // silent — manual flow unaffected
+        return;
+      }
+      const { tags } = (await res.json()) as { tags?: AutoTags };
+      if (seq !== analyzeSeq.current || !tags) return;
+
+      if (tags.category && !touched.current.has("category")) {
+        setCategory(tags.category);
+      }
+      if (tags.subcategory && !touched.current.has("subcategory")) {
+        setSubcategory(tags.subcategory);
+      }
+      if (tags.color && !touched.current.has("color")) setColor(tags.color);
+      if (tags.brand && !touched.current.has("brand")) setBrand(tags.brand);
+      if (tags.season.length && !touched.current.has("season")) {
+        setSeasons(tags.season);
+      }
+      setTagStatus("done");
+    } catch {
+      if (seq === analyzeSeq.current) setTagStatus("idle");
+    }
+  }
+
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -38,12 +94,14 @@ export function AddItemForm() {
     setOriginalFile(file);
     setStage("processing");
     setProgress(0);
+    setTagStatus("idle");
 
     try {
       const blob = await removeImageBackground(file, setProgress);
       setCutoutBlob(blob);
       setCutoutPreview(URL.createObjectURL(blob));
       setStage("review");
+      void autoTag(blob);
     } catch (err) {
       console.error(err);
       setError(
@@ -54,6 +112,7 @@ export function AddItemForm() {
   }
 
   function toggleSeason(value: string) {
+    markTouched("season");
     setSeasons((prev) =>
       prev.includes(value)
         ? prev.filter((s) => s !== value)
@@ -164,6 +223,20 @@ export function AddItemForm() {
 
       {/* Details side */}
       <div className="space-y-4">
+        {tagStatus !== "idle" && (
+          <p
+            className={`rounded-lg px-3 py-2 text-sm ${
+              tagStatus === "tagging"
+                ? "bg-border/40 text-muted"
+                : "bg-accent/10"
+            }`}
+          >
+            {tagStatus === "tagging"
+              ? "✨ Auto-tagging your piece…"
+              : "✨ Auto-filled from your photo — double-check the details."}
+          </p>
+        )}
+
         <div>
           <Label>Category</Label>
           <div className="flex flex-wrap gap-2">
@@ -172,6 +245,8 @@ export function AddItemForm() {
                 key={c.value}
                 type="button"
                 onClick={() => {
+                  markTouched("category");
+                  markTouched("subcategory");
                   setCategory(c.value);
                   setSubcategory("");
                 }}
@@ -192,7 +267,10 @@ export function AddItemForm() {
           <input
             list="subcat-options"
             value={subcategory}
-            onChange={(e) => setSubcategory(e.target.value)}
+            onChange={(e) => {
+              markTouched("subcategory");
+              setSubcategory(e.target.value);
+            }}
             placeholder="e.g. Sweater"
             className={inputClass}
           />
@@ -208,7 +286,10 @@ export function AddItemForm() {
             <Label>Brand</Label>
             <input
               value={brand}
-              onChange={(e) => setBrand(e.target.value)}
+              onChange={(e) => {
+                markTouched("brand");
+                setBrand(e.target.value);
+              }}
               placeholder="e.g. Everlane"
               className={inputClass}
             />
@@ -217,7 +298,10 @@ export function AddItemForm() {
             <Label>Color</Label>
             <input
               value={color}
-              onChange={(e) => setColor(e.target.value)}
+              onChange={(e) => {
+                markTouched("color");
+                setColor(e.target.value);
+              }}
               placeholder="e.g. Cream"
               className={inputClass}
             />
