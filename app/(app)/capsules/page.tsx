@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { signPaths } from "@/lib/images";
 import { collectionTypeEmoji, collectionTypeLabel } from "@/lib/collections";
 import { formatDay } from "@/lib/dates";
+import { Segments } from "@/components/Segments";
 
 type Row = {
   id: string;
@@ -37,16 +38,21 @@ export default async function CapsulesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Capsules</h1>
-          <p className="text-sm text-muted">
+          <Segments
+            items={[
+              { href: "/outfits", label: "Outfits" },
+              { href: "/capsules", label: "Capsules" },
+            ]}
+          />
+          <p className="mt-2 text-sm text-muted">
             Curated mini-wardrobes and trip packing lists
           </p>
         </div>
         <Link
           href="/capsules/new"
-          className="rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-white hover:opacity-90"
+          className="shrink-0 rounded-xl bg-accent px-4 py-2.5 text-sm font-medium text-white hover:opacity-90"
         >
           + New
         </Link>

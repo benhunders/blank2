@@ -4,6 +4,7 @@ import { loadBoardItems } from "@/lib/board-items";
 import { loadOutfits } from "@/lib/load-outfits";
 import { isBoardLayout, type BoardPlacement } from "@/lib/outfits";
 import { CalendarView, type WearEntry } from "@/components/CalendarView";
+import { Segments } from "@/components/Segments";
 
 type WearRow = {
   id: string;
@@ -52,8 +53,13 @@ export default async function CalendarPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Calendar</h1>
-        <p className="text-sm text-muted">
+        <Segments
+          items={[
+            { href: "/calendar", label: "Calendar" },
+            { href: "/insights", label: "Insights" },
+          ]}
+        />
+        <p className="mt-2 text-sm text-muted">
           Log what you wear to track your real rotation.
         </p>
       </div>

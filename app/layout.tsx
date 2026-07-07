@@ -24,6 +24,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
+  // Required for env(safe-area-inset-*) to apply in installed-PWA mode.
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
