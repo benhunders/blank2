@@ -1,15 +1,21 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { signPaths } from "@/lib/images";
+import { signOut } from "@/app/actions/auth";
 import type { StyleProfile } from "@/lib/fit";
 import { StyleProfileForm } from "@/components/StyleProfileForm";
 
 export default async function ProfilePage() {
   const supabase = await createClient();
-  const { data } = await supabase
-    .from("style_profiles")
-    .select("*")
-    .maybeSingle();
+  const [
+    {
+      data: { user },
+    },
+    { data },
+  ] = await Promise.all([
+    supabase.auth.getUser(),
+    supabase.from("style_profiles").select("*").maybeSingle(),
+  ]);
 
   const profile = (data as StyleProfile | null) ?? null;
   const photoUrl = profile?.photo_path
@@ -35,7 +41,25 @@ export default async function ProfilePage() {
           🪞 My try-ons
         </Link>
       </div>
+
       <StyleProfileForm initialProfile={profile} initialPhotoUrl={photoUrl} />
+
+      <section className="border-t border-border pt-6">
+        <div className="flex items-center justify-between gap-4">
+          <div className="min-w-0">
+            <p className="truncate text-sm font-medium">{user?.email}</p>
+            <p className="text-xs text-muted">Signed in</p>
+          </div>
+          <form action={signOut}>
+            <button
+              type="submit"
+              className="rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-border/40"
+            >
+              Sign out
+            </button>
+          </form>
+        </div>
+      </section>
     </div>
   );
 }
