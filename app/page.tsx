@@ -6,7 +6,7 @@ export default function LandingPage() {
       <header className="flex items-center justify-between px-6 py-5">
         <span className="text-lg font-semibold tracking-tight">Capsule</span>
         <nav className="flex items-center gap-2 text-sm">
-          <Link href="/sign-in" className="rounded-lg px-3 py-2 hover:bg-border/50">
+          <Link href="/sign-in" className="rounded-lg px-3 py-2 hover:bg-black/5">
             Sign in
           </Link>
           <Link
@@ -39,7 +39,7 @@ export default function LandingPage() {
           </Link>
           <Link
             href="/sign-in"
-            className="rounded-xl border border-border bg-card px-5 py-3 text-sm font-medium hover:bg-border/40"
+            className="rounded-xl border border-border bg-card px-5 py-3 text-sm font-medium hover:bg-black/5"
           >
             Sign in
           </Link>

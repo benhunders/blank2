@@ -217,13 +217,13 @@ export function OutfitBuilder({
               <span className="text-sm text-muted">Selected:</span>
               <button
                 onClick={() => resizeSelected(-6)}
-                className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm hover:bg-border/40"
+                className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm hover:bg-black/5"
               >
                 Smaller
               </button>
               <button
                 onClick={() => resizeSelected(6)}
-                className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm hover:bg-border/40"
+                className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm hover:bg-black/5"
               >
                 Bigger
               </button>
@@ -266,7 +266,7 @@ export function OutfitBuilder({
               />
               <button
                 onClick={addTag}
-                className="rounded-xl border border-border bg-card px-3 text-sm hover:bg-border/40"
+                className="rounded-xl border border-border bg-card px-3 text-sm hover:bg-black/5"
               >
                 Add
               </button>
@@ -277,7 +277,7 @@ export function OutfitBuilder({
                   <button
                     key={t}
                     onClick={() => setTags(tags.filter((x) => x !== t))}
-                    className="rounded-full bg-border/60 px-2.5 py-1 text-xs hover:bg-border"
+                    className="rounded-full bg-black/5 px-2.5 py-1 text-xs hover:bg-black/10"
                   >
                     {t} ✕
                   </button>

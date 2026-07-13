@@ -213,7 +213,7 @@ export function StylistChat({
                 {saved[idx] ? (
                   <Link
                     href={`/outfits/${saved[idx]}`}
-                    className="block rounded-xl border border-border px-4 py-2 text-center text-sm font-medium hover:bg-border/40"
+                    className="block rounded-xl border border-border px-4 py-2 text-center text-sm font-medium hover:bg-black/5"
                   >
                     Saved ✓ View outfit
                   </Link>

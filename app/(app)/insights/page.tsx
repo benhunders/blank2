@@ -96,7 +96,7 @@ export default async function InsightsPage() {
     return (
       <Link
         href={`/closet/${i.id}`}
-        className="flex items-center gap-3 rounded-xl p-2 hover:bg-border/30"
+        className="flex items-center gap-3 rounded-xl p-2 hover:bg-black/5"
       >
         <Thumb i={i} />
         <div className="min-w-0 flex-1">
@@ -205,7 +205,7 @@ export default async function InsightsPage() {
                   <span className="w-24 shrink-0 text-sm text-muted">
                     {c.label}
                   </span>
-                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-border/50">
+                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-black/10">
                     <div
                       className="h-full rounded-full bg-accent"
                       style={{ width: `${(c.count / maxCat) * 100}%` }}

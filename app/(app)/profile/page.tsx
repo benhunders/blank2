@@ -36,7 +36,7 @@ export default async function ProfilePage() {
         </div>
         <Link
           href="/tryons"
-          className="shrink-0 rounded-xl border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-border/40"
+          className="shrink-0 rounded-xl border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-black/5"
         >
           🪞 My try-ons
         </Link>
@@ -53,7 +53,7 @@ export default async function ProfilePage() {
           <form action={signOut}>
             <button
               type="submit"
-              className="rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-border/40"
+              className="rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-black/5"
             >
               Sign out
             </button>

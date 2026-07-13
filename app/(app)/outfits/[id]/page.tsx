@@ -75,7 +75,7 @@ export default async function OutfitPage({
                 {data.tags.map((t: string) => (
                   <span
                     key={t}
-                    className="rounded-full bg-border/60 px-2.5 py-1 text-xs"
+                    className="rounded-full bg-black/5 px-2.5 py-1 text-xs"
                   >
                     {t}
                   </span>

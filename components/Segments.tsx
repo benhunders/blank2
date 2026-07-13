@@ -13,7 +13,7 @@ export function Segments({
   const pathname = usePathname();
 
   return (
-    <div className="inline-flex rounded-full bg-border/40 p-1">
+    <div className="inline-flex rounded-full bg-white/35 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
       {items.map(({ href, label }) => {
         const active = pathname.startsWith(href);
         return (
@@ -22,7 +22,7 @@ export function Segments({
             href={href}
             className={`rounded-full px-4 py-1.5 text-sm transition ${
               active
-                ? "bg-card font-semibold shadow-sm"
+                ? "bg-white/90 font-semibold shadow-sm"
                 : "text-muted hover:text-foreground"
             }`}
           >

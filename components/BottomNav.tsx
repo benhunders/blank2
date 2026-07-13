@@ -44,10 +44,10 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/90 backdrop-blur"
-      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      className="glass fixed inset-x-3 z-30 mx-auto max-w-lg rounded-[28px]"
+      style={{ bottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
     >
-      <div className="mx-auto grid h-16 max-w-lg grid-cols-5">
+      <div className="grid h-16 grid-cols-5">
         {TABS.map(({ href, label, match, Icon, center }) => {
           const active = match.some((m) => pathname.startsWith(m));
           if (center) {
@@ -59,7 +59,7 @@ export function BottomNav() {
                 className="flex flex-col items-center justify-start"
               >
                 <span
-                  className={`-mt-5 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg ring-4 ring-background transition ${
+                  className={`-mt-5 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg ring-4 ring-white/60 transition ${
                     active ? "bg-accent" : "bg-accent/90 hover:bg-accent"
                   }`}
                 >

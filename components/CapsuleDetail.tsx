@@ -179,7 +179,7 @@ export function CapsuleDetail({
               {packedCount} / {memberItems.length}
             </span>
           </div>
-          <div className="mt-2 h-2 overflow-hidden rounded-full bg-border/60">
+          <div className="mt-2 h-2 overflow-hidden rounded-full bg-black/10">
             <div
               className="h-full rounded-full bg-accent transition-all"
               style={{
@@ -196,7 +196,7 @@ export function CapsuleDetail({
           <h2 className="font-medium">Pieces ({memberItems.length})</h2>
           <button
             onClick={() => setPickItems((v) => !v)}
-            className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm hover:bg-border/40"
+            className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm hover:bg-black/5"
           >
             {pickItems ? "Done" : "+ Add pieces"}
           </button>
@@ -291,7 +291,7 @@ export function CapsuleDetail({
           <h2 className="font-medium">Outfits ({memberOutfits.length})</h2>
           <button
             onClick={() => setPickOutfits((v) => !v)}
-            className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm hover:bg-border/40"
+            className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm hover:bg-black/5"
           >
             {pickOutfits ? "Done" : "+ Add outfits"}
           </button>

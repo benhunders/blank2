@@ -48,7 +48,7 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
         type="button"
         onClick={continueWithGoogle}
         disabled={oauthBusy}
-        className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium transition hover:bg-border/40 disabled:opacity-50"
+        className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium transition hover:bg-black/5 disabled:opacity-50"
       >
         <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
           <path

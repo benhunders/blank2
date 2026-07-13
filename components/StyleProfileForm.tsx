@@ -263,7 +263,7 @@ export function StyleProfileForm({
                   onClick={() =>
                     setAvoidColors(avoidColors.filter((x) => x !== c))
                   }
-                  className="rounded-full bg-border/60 px-2.5 py-1 text-xs hover:bg-border"
+                  className="rounded-full bg-black/5 px-2.5 py-1 text-xs hover:bg-black/10"
                 >
                   {c} ✕
                 </button>
@@ -313,7 +313,7 @@ export function StyleProfileForm({
             />
             <div className="space-y-2">
               <label className="block">
-                <span className="inline-flex cursor-pointer rounded-lg border border-border bg-card px-3 py-1.5 text-sm hover:bg-border/40">
+                <span className="inline-flex cursor-pointer rounded-lg border border-border bg-card px-3 py-1.5 text-sm hover:bg-black/5">
                   {uploading ? "Uploading…" : "Replace photo"}
                 </span>
                 <input
@@ -333,7 +333,7 @@ export function StyleProfileForm({
           </div>
         ) : (
           <label className="block">
-            <span className="inline-flex cursor-pointer rounded-xl border border-dashed border-border bg-card/50 px-4 py-3 text-sm hover:bg-border/30">
+            <span className="inline-flex cursor-pointer rounded-xl border border-dashed border-border bg-card/50 px-4 py-3 text-sm hover:bg-black/5">
               {uploading ? "Uploading…" : "+ Add a full-body photo"}
             </span>
             <input

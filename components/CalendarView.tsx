@@ -89,13 +89,13 @@ export function CalendarView({
         <div className="flex items-center gap-1">
           <button
             onClick={() => shiftMonth(-1)}
-            className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm hover:bg-border/40"
+            className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm hover:bg-black/5"
           >
             ←
           </button>
           <button
             onClick={() => shiftMonth(1)}
-            className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm hover:bg-border/40"
+            className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm hover:bg-black/5"
           >
             →
           </button>
@@ -125,7 +125,7 @@ export function CalendarView({
             <button
               key={i}
               onClick={() => setLogDate(key)}
-              className="min-h-20 bg-card p-1 text-left align-top transition hover:bg-border/30"
+              className="min-h-20 bg-card p-1 text-left align-top transition hover:bg-black/5"
             >
               <span
                 className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-xs ${
@@ -253,7 +253,7 @@ function LogModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-t-2xl border border-border bg-background p-5 sm:rounded-2xl"
+        className="glass max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-t-3xl p-5 sm:rounded-3xl"
       >
         <div className="flex items-center justify-between">
           <h2 className="font-medium">{pretty}</h2>
@@ -292,13 +292,13 @@ function LogModal({
           </div>
         )}
 
-        <div className="mt-4 flex gap-1 rounded-lg bg-border/40 p-1 text-sm">
+        <div className="mt-4 flex gap-1 rounded-lg bg-white/35 p-1 text-sm">
           {(["outfit", "item"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
               className={`flex-1 rounded-md py-1.5 font-medium capitalize transition ${
-                tab === t ? "bg-card shadow-sm" : "text-muted"
+                tab === t ? "bg-white/90 shadow-sm" : "text-muted"
               }`}
             >
               {t === "outfit" ? "Outfit" : "Single item"}

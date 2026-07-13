@@ -184,7 +184,7 @@ export function AddItemForm() {
           ) : stage === "processing" ? (
             <div className="px-6 text-center">
               <p className="text-sm font-medium">Removing background…</p>
-              <div className="mt-3 h-2 w-48 overflow-hidden rounded-full bg-border">
+              <div className="mt-3 h-2 w-48 overflow-hidden rounded-full bg-black/10">
                 <div
                   className="h-full bg-accent transition-all"
                   style={{ width: `${Math.round(progress * 100)}%` }}
@@ -215,7 +215,7 @@ export function AddItemForm() {
           type="button"
           onClick={() => fileInput.current?.click()}
           disabled={stage === "processing" || stage === "saving"}
-          className="mt-3 w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium hover:bg-border/40 disabled:opacity-50"
+          className="mt-3 w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium hover:bg-black/5 disabled:opacity-50"
         >
           {cutoutPreview ? "Choose a different photo" : "Take / upload photo"}
         </button>
@@ -227,7 +227,7 @@ export function AddItemForm() {
           <p
             className={`rounded-lg px-3 py-2 text-sm ${
               tagStatus === "tagging"
-                ? "bg-border/40 text-muted"
+                ? "bg-white/50 text-muted"
                 : "bg-accent/10"
             }`}
           >

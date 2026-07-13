@@ -1,11 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #faf9f7;
+  --background: #f7f5f2;
   --foreground: #1c1917;
-  --card: #ffffff;
-  --muted: #78716c;
-  --border: #e7e5e4;
+  /* Translucent surfaces: cards read as glass over the ambient wash below
+     without needing backdrop-filter (which is GPU-expensive in scroll content). */
+  --card: rgba(255, 255, 255, 0.62);
+  --muted: #6f6862;
+  --border: rgba(28, 25, 23, 0.09);
   --accent: #1c1917;
 }
 
@@ -26,13 +28,42 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Subtle checkerboard so transparent cut-out PNGs read as cut-outs */
+/* Ambient color wash the glass surfaces pick up. A single fixed, composited
+   layer — painted once, never on scroll. Pure CSS gradients, no images. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(40rem 28rem at 12% -8%, rgba(240, 178, 158, 0.4), transparent 62%),
+    radial-gradient(38rem 28rem at 96% 14%, rgba(187, 170, 228, 0.35), transparent 62%),
+    radial-gradient(46rem 34rem at 50% 115%, rgba(163, 201, 226, 0.4), transparent 64%);
+}
+
+/* Liquid-glass chrome. Real backdrop blur is reserved for the few FIXED
+   surfaces (header, bottom nav, modals) — they don't repaint while content
+   scrolls, so the blur cost is a one-off, not per-frame. Do not put this
+   class on elements inside scroll content. */
+.glass {
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  backdrop-filter: blur(18px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 8px 32px rgba(28, 25, 23, 0.08);
+}
+
+/* Subtle checkerboard so transparent cut-out PNGs read as cut-outs.
+   Faint white base keeps cut-outs legible over the ambient wash. */
 .bg-checker {
+  background-color: rgba(255, 255, 255, 0.4);
   background-image:
-    linear-gradient(45deg, #f0eeec 25%, transparent 25%),
-    linear-gradient(-45deg, #f0eeec 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #f0eeec 75%),
-    linear-gradient(-45deg, transparent 75%, #f0eeec 75%);
+    linear-gradient(45deg, rgba(28, 25, 23, 0.05) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(28, 25, 23, 0.05) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(28, 25, 23, 0.05) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(28, 25, 23, 0.05) 75%);
   background-size: 16px 16px;
   background-position: 0 0, 0 8px, 8px -8px, -8px 0;
 }

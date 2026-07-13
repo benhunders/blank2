@@ -58,7 +58,7 @@ export function OutfitActions({ outfitId }: { outfitId: string }) {
       <button
         onClick={handleWoreToday}
         disabled={logging || logged}
-        className="w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium hover:bg-border/40 disabled:opacity-60"
+        className="w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium hover:bg-black/5 disabled:opacity-60"
       >
         {logged ? "Logged for today ✓" : logging ? "Logging…" : "👕 Wore today"}
       </button>

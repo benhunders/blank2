@@ -105,7 +105,7 @@ export default async function CapsulesPage() {
                 </div>
                 <div className="mt-3 flex items-center justify-between">
                   <p className="truncate font-medium">{c.name}</p>
-                  <span className="shrink-0 rounded-full bg-border/60 px-2 py-0.5 text-[11px] text-muted">
+                  <span className="shrink-0 rounded-full bg-black/5 px-2 py-0.5 text-[11px] text-muted">
                     {collectionTypeLabel(c.type)}
                   </span>
                 </div>
