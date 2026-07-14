@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { getCurrentUser } from "@/lib/supabase/auth";
 import { signPaths } from "@/lib/images";
 import { signOut } from "@/app/actions/auth";
 import type { StyleProfile } from "@/lib/fit";
@@ -8,13 +9,8 @@ import { CompressImages } from "@/components/CompressImages";
 
 export default async function ProfilePage() {
   const supabase = await createClient();
-  const [
-    {
-      data: { user },
-    },
-    { data },
-  ] = await Promise.all([
-    supabase.auth.getUser(),
+  const [user, { data }] = await Promise.all([
+    getCurrentUser(),
     supabase.from("style_profiles").select("*").maybeSingle(),
   ]);
 
