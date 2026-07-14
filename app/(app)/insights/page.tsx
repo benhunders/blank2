@@ -83,6 +83,8 @@ export default async function InsightsPage() {
         {i.image_url && urls[i.image_url] && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
+            loading="lazy"
+            decoding="async"
             src={urls[i.image_url]}
             alt=""
             className="h-full w-full object-contain p-0.5"

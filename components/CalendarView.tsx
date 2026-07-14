@@ -145,6 +145,8 @@ export function CalendarView({
                     ) : w.itemImageUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
+            loading="lazy"
+            decoding="async"
                         src={w.itemImageUrl}
                         alt=""
                         className="bg-checker h-full w-full object-contain"
@@ -275,6 +277,8 @@ function LogModal({
                   ) : w.itemImageUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
+            loading="lazy"
+            decoding="async"
                       src={w.itemImageUrl}
                       alt=""
                       className="bg-checker h-full w-full object-contain"
@@ -345,6 +349,8 @@ function LogModal({
                   {item.imageUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
+            loading="lazy"
+            decoding="async"
                       src={item.imageUrl}
                       alt={item.label}
                       className="h-full w-full object-contain p-1"

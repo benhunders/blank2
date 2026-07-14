@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { removeImageBackground } from "@/lib/background-removal";
-import { downscaleImage } from "@/lib/downscale";
+import { downscaleCutout, downscaleImage } from "@/lib/downscale";
 import { WARDROBE_BUCKET } from "@/lib/images";
 import { CATEGORIES, SUBCATEGORIES, SEASONS } from "@/lib/constants";
 import type { ItemCategory } from "@/lib/types";
@@ -131,18 +131,31 @@ export function AddItemForm() {
       } = await supabase.auth.getUser();
       if (!user) throw new Error("Not signed in.");
 
+      // Downscale before upload — raw cut-outs are camera-resolution PNGs
+      // (many MB each) and would make every grid slow to load.
+      const cutout = await downscaleCutout(cutoutBlob, 1024);
+      let original: Blob = originalFile;
+      let origExt = originalFile.name.split(".").pop() || "jpg";
+      let origType = originalFile.type || "image/jpeg";
+      try {
+        original = await downscaleImage(originalFile, 1600, "#ffffff");
+        origExt = "jpg";
+        origType = "image/jpeg";
+      } catch {
+        /* unsupported format — keep the raw file */
+      }
+
       const key = crypto.randomUUID();
-      const cutoutPath = `${user.id}/${key}.png`;
-      const origExt = originalFile.name.split(".").pop() || "jpg";
+      const cutoutPath = `${user.id}/${key}.${cutout.ext}`;
       const origPath = `${user.id}/${key}-orig.${origExt}`;
 
       const [cutoutUp, origUp] = await Promise.all([
         supabase.storage
           .from(WARDROBE_BUCKET)
-          .upload(cutoutPath, cutoutBlob, { contentType: "image/png" }),
+          .upload(cutoutPath, cutout.blob, { contentType: cutout.contentType }),
         supabase.storage
           .from(WARDROBE_BUCKET)
-          .upload(origPath, originalFile, { contentType: originalFile.type }),
+          .upload(origPath, original, { contentType: origType }),
       ]);
       if (cutoutUp.error) throw cutoutUp.error;
       if (origUp.error) throw origUp.error;

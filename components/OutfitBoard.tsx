@@ -23,6 +23,8 @@ export function OutfitBoard({
             key={p.itemId}
             src={item.imageUrl}
             alt={item.label}
+            loading="lazy"
+            decoding="async"
             style={{
               position: "absolute",
               left: `${p.x}%`,

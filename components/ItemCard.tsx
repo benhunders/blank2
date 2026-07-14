@@ -20,6 +20,8 @@ export function ItemCard({
           <img
             src={imageUrl}
             alt={item.subcategory ?? categoryLabel(item.category)}
+            loading="lazy"
+            decoding="async"
             className="h-full w-full object-contain p-2"
           />
         ) : (

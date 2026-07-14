@@ -91,6 +91,8 @@ export default async function CapsulesPage() {
                     covers.map((p, i) => (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
+            loading="lazy"
+            decoding="async"
                         key={i}
                         src={urls[p]}
                         alt=""

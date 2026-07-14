@@ -4,6 +4,7 @@ import { signPaths } from "@/lib/images";
 import { signOut } from "@/app/actions/auth";
 import type { StyleProfile } from "@/lib/fit";
 import { StyleProfileForm } from "@/components/StyleProfileForm";
+import { CompressImages } from "@/components/CompressImages";
 
 export default async function ProfilePage() {
   const supabase = await createClient();
@@ -43,6 +44,10 @@ export default async function ProfilePage() {
       </div>
 
       <StyleProfileForm initialProfile={profile} initialPhotoUrl={photoUrl} />
+
+      <section className="border-t border-border pt-6">
+        <CompressImages />
+      </section>
 
       <section className="border-t border-border pt-6">
         <div className="flex items-center justify-between gap-4">

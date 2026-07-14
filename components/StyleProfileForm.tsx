@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { WARDROBE_BUCKET } from "@/lib/images";
+import { downscaleImage } from "@/lib/downscale";
 import {
   BODY_SHAPES,
   FIT_PREFERENCES,
@@ -98,11 +99,22 @@ export function StyleProfileForm({
       setError("Not signed in.");
       return;
     }
-    const ext = file.name.split(".").pop() || "jpg";
+    // Downscale before upload — phone photos are many MB and slow to render;
+    // 1600px is plenty for display, analysis, and try-on.
+    let upload: Blob = file;
+    let ext = file.name.split(".").pop() || "jpg";
+    let type = file.type || "image/jpeg";
+    try {
+      upload = await downscaleImage(file, 1600, "#ffffff");
+      ext = "jpg";
+      type = "image/jpeg";
+    } catch {
+      /* unsupported format — keep the raw file */
+    }
     const path = `${user.id}/me/${Date.now()}.${ext}`;
     const { error: upErr } = await supabase.storage
       .from(WARDROBE_BUCKET)
-      .upload(path, file, { upsert: true });
+      .upload(path, upload, { upsert: true, contentType: type });
     if (upErr) {
       setUploading(false);
       setError(upErr.message);

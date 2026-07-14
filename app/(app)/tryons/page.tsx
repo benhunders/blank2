@@ -78,6 +78,8 @@ export default async function TryOnsPage() {
                   {urls[r.result_path] && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
+            loading="lazy"
+            decoding="async"
                       src={urls[r.result_path]}
                       alt={`Try-on: ${sourceLabel}`}
                       className="aspect-[3/4] w-full object-cover"
