@@ -55,6 +55,7 @@ export function BottomNav() {
               <Link
                 key={href}
                 href={href}
+                prefetch
                 aria-label={label}
                 className="flex flex-col items-center justify-start"
               >
@@ -79,6 +80,7 @@ export function BottomNav() {
             <Link
               key={href}
               href={href}
+              prefetch
               aria-label={label}
               className={`flex flex-col items-center justify-center gap-0.5 text-[11px] transition ${
                 active ? "font-semibold text-foreground" : "text-muted"
